@@ -1,6 +1,6 @@
 # home-automation
 
-These are notes and enablement software that helped me set up the automation of my range of thermostats, video doorbell, speakers, etc.
+These are notes and enablement software that helped me set up Apple Home automation of my Nest thermostats, Ring video doorbell, Apple speakers, etc.
 
 This is based on using Apple as your base platform and integrating other products to that environment.
 
