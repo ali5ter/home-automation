@@ -1,6 +1,6 @@
 # home-automation
 
-These are notes and enablement of software that helped me set up automation for my range of thermostats, video doorbell, speakers, TCs, etc.
+These are notes and enablement software that helped me set up the automation of my range of thermostats, video doorbell, speakers, etc.
 
 This is based on using Apple as your base platform and integrating other products to that environment.
 
@@ -26,9 +26,9 @@ Previous generations of Nest don't support Matter. We use [Homebridge](https://h
 
 Doing this with Docker Compose is super convenient and this [docker-compose.yml](homebridge/docker-compose.yml) file provides the definition. Running [start_server_stack.sh](start_server_stack.sh) script will use this definition to stand up the server.
 
-** Note: Homebridge in Docker Desktop for macOS can’t be discovered by the Apple Home app reliably because Docker on Mac doesn’t expose the container’s mDNS/Bonjour to your LAN. Host networking doesn’t fix it on Mac (Docker’s host mode is a VM thing, not your actual Wi-Fi/Ethernet).
+** Note: Homebridge in Docker Desktop for macOS can’t be discovered by the Apple Home app reliably because Docker on Mac doesn’t expose the container’s mDNS/Bonjour to your LAN. This means Apple Home cannot find Homebridge running in Docker due to network isolation. Host networking doesn’t fix it on Mac (Docker’s host mode is a VM thing, not your actual Wi-Fi/Ethernet). For more details, see [Docker Desktop networking limitations on macOS](https://docs.docker.com/desktop/networking/).
 
-You can install Homebridge natively on macOS as long as you have [Node](https://nodejs.org/en) installed (which is easily installed using [homebrew](brew.sh)). Run the following from the terminal:
+You can install Homebridge natively on macOS as long as you have [Node](https://nodejs.org/en) installed (which is easily installed using [homebrew](brew.sh)). To install Node using Homebrew, run:
 
 ```bash
 sudo npm install -g --unsafe-perm homebridge homebridge-config-ui-x
@@ -52,23 +52,23 @@ Log into the [Google Cloud Console](https://console.cloud.google.com/)
 
 ### 5. Configure access to you Nest devices
 
-In the browser signed into your [Device Access Console](https://console.nest.google.com/device-access/project-list), open this URL after replacing the bracketed parts:
+In the browser signed into your [Device Access Console](https://console.nest.google.com/device-access/project-list), open this URL after replacing each value inside curly braces `{}` with your actual values:
 
-``` url
-https://nestservices.google.com/partnerconnections/<SDM_PROJECT_ID>/auth?redirect_uri=https://www.google.com&access_type=offline&prompt=consent&client_id=<YOUR_OAUTH_CLIENT_ID>&response_type=code&scope=https://www.googleapis.com/auth/sdm.service+https://www.googleapis.com/auth/pubsub
+```bash
+https://nestservices.google.com/partnerconnections/{SDM_PROJECT_ID}/auth?redirect_uri=https://www.google.com&access_type=offline&prompt=consent&client_id={YOUR_OAUTH_CLIENT_ID}&response_type=code&scope=https://www.googleapis.com/auth/sdm.service+https://www.googleapis.com/auth/pubsub
 ```
 
 In the resulting page, approve access to all the Nest thermostats, click Next, and when you land on the resulting page, copy the URL which will contain a `code` that you copy and save for the next step.
 
-Run the following curl command in the terminal replacing the bracketed parts:
+Run the following curl command in the terminal, replacing each value inside curly braces `{}` with your actual credentials and codes:
 
 ```bash
-curl -s -X POST <https://oauth2.googleapis.com/token> \
-  -d client_id="<YOUR_OAUTH_CLIENT_ID>" \
-  -d client_secret="<YOUR_OAUTH_CLIENT_SECRET>" \
-  -d code="<PASTE_THE_CODE>" \
+curl -s -X POST https://oauth2.googleapis.com/token \
+  -d client_id="{YOUR_OAUTH_CLIENT_ID}" \
+  -d client_secret="{YOUR_OAUTH_CLIENT_SECRET}" \
+  -d code="{PASTE_THE_CODE}" \
   -d grant_type=authorization_code \
-  -d redirect_uri="<https://www.google.com>"
+  -d redirect_uri="https://www.google.com"
 ```
 
 Copy the `refresh_token` value from the resulting JSON and save for later.
@@ -96,7 +96,11 @@ Proceed to download the latest version of that plugin. Enter all the information
 
 Save the form and this will restart Homebridge to make the configuration changes. The Homebridge Logs displayed in the Status page should list the Nest Thermostats you allowed access to above.
 
-The Nest thermostats should appear in Apple Home, if not, repair Homebridge with Apple Home.
+The Nest thermostats should appear in Apple Home. If not, you may need to repair Homebridge with Apple Home:
+
+- In the Homebridge UI, go to the Status page and click "Unpair" or "Reset Homebridge".
+- In Apple Home, remove the Homebridge accessory.
+- Restart Homebridge, then re-add it in Apple Home by scanning the pairing code shown in the Homebridge UI Status page.
 
 ### 8. Save the Homebridge configuration
 
