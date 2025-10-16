@@ -1,0 +1,12 @@
+services:
+  homebridge:
+    image: homebridge/homebridge:latest
+    container_name: homebridge
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - TZ=America/New_York
+    volumes:
+      - homebridge:/homebridge
+volumes:
+  homebridge:
