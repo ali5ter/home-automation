@@ -98,9 +98,9 @@ Save the form and this will restart Homebridge to make the configuration changes
 
 The Nest thermostats should appear in Apple Home. If not, you may need to repair Homebridge with Apple Home:
 
-- In the Homebridge UI, go to the Status page and click "Unpair" or "Reset Homebridge".
-- In Apple Home, remove the Homebridge accessory.
-- Restart Homebridge, then re-add it in Apple Home by scanning the pairing code shown in the Homebridge UI Status page.
+* In the Homebridge UI, go to the Status page and click "Unpair" or "Reset Homebridge".
+* In Apple Home, remove the Homebridge accessory.
+* Restart Homebridge, then re-add it in Apple Home by scanning the pairing code shown in the Homebridge UI Status page.
 
 ### 8. Save the Homebridge configuration
 
