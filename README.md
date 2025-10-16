@@ -1,4 +1,4 @@
-# home-automation
+# 🤖 home-automation
 
 These are notes and enablement software that helped me set up Apple Home automation of my Nest thermostats, Ring video doorbell, Apple speakers, etc.
 
