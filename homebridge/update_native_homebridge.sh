@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # @file: update_native_homebridge.sh
-# @brief: Back up existing Homebridge configuration and update to the latest version
+# @brief: Uninstall and update a native Homebridge installation on macOS
 # @note: Node v22 is required for Homebridge compatibility
-# @note: Homebridge config is stored at: /Users/<username>/.homebridge
+# @note: Homebridge config is stored at /Users/<username>/.homebridge
 # @note: This script is intended for macOS systems
 # @author: Alister Lewis-Bowen <alister@lewis-bowen.org>
 
@@ -15,7 +15,8 @@ echo "Homebridge version: $(homebridge -V)
 npm version: $(npm -v)
 Node version: $(node -v)"
 
-# Downgrade to Node 22 !!
+# At time of writing, the latest Node version is 24. Homebridge requires
+# Node 22 LTS.
 brew install node@22
 brew unlink node
 brew link --overwrite --force node@22
@@ -26,7 +27,8 @@ echo "🔄 Updating native Homebridge installation..."
 sudo hb-service stop
 sudo hb-service uninstall
 
-# Remove existing launchd service since this seems to be an issue with macOS updates
+# Remove existing launchd service since this seems to be an issue with updating
+# Homebridge on macOS
 sudo launchctl bootout system /Library/LaunchDaemons/com.homebridge.server.plist 2>/dev/null || true
 sudo rm -f /Library/LaunchDaemons/com.homebridge.server.plist
 
