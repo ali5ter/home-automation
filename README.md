@@ -35,6 +35,8 @@ sudo npm install -g --unsafe-perm homebridge homebridge-config-ui-x
 sudo hb-service install
 ```
 
+Note: At the time of writing, Node v11 appears to be the version Homebridge works with.
+
 ### 2. Pair Homebridge to Apple Home
 
 Open the Homebridge UI using the URL provided by the output or logs emitted in step 1. Typically, `http://<host-ip>:8581`.
