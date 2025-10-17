@@ -109,3 +109,39 @@ The Nest thermostats should appear in Apple Home. If not, you may need to repair
 In the Homebridge UI, navigate to the JSON Config page, and copy and paste the configuration somewhere safe. This way if you have to move or upgrade Homebridge, you'll have the configuration to restore.
 
 ## Bridging 2nd gen Ring video doorbells to Apple Home
+
+[Scrypted](https://www.scrypted.app) provides the best video performance but integration with Ring can also be performed with Homebridge.
+
+### 1. Dependencies for Homebridge
+
+Install the `ffmpeg` tools using homebrew:
+
+```bash
+brew install ffmpeg
+```
+
+In the Homebridge UI, navigate to the Plugins page and search for 'homebridge-ring'.
+Enter the Ring credentials and 2FA code, then save to restart Homebridge.
+
+### 2. Configure the Homebridge Ring plugin
+
+In the Homebridge plugins page, open up the Ring plugin configurations form, and make sure the following is set:
+
+* Hide In-Home Doorbell Switch: Checked
+* Hide Doorbell Programmable Switch: Checked
+* Debug Logging: Checked
+* Camera/Chime Status Polling (seconds): 20
+* Avoid Snapshot Battery Drain: Checked
+
+Save and restart the plugin.
+
+### 3. Add the Ring doorbell to Apple Home
+
+Open the Homebridge UI plugins page and click on the QR code in the Ring plugin card. This will show the pairing code.
+In Apple Home, go Add Accessory, and pair using this code to add the doorbell.
+
+After that pairing completes, Apple Home will automatically show the Cameras & Doorbells section in settings, and you’ll be able to:
+
+* Enable “Doorbell Chime on HomePod”
+* Choose notifications and recording options, and
+* Trigger automations based on doorbell presses or motion.
