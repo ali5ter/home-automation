@@ -35,6 +35,23 @@ sudo npm install -g --unsafe-perm homebridge homebridge-config-ui-x
 sudo hb-service install
 ```
 
+#### Clean install if your server IP changes
+
+You should be able to reinstall the service like this:
+
+```bash
+sudo hb-service uninstall
+sudo hb-service install
+```
+
+However, if you used the npm approach and want a compelely clean method, uninstall the npm packages and rerun the installation commands again:
+
+```bash
+sudo npm uninstall -g --unsafe-perm homebridge homebridge-config-ui-x
+sudo npm install -g --unsafe-perm homebridge homebridge-config-ui-x
+sudo hb-service install
+```
+
 Note: At the time of writing, Node v11 appears to be the version Homebridge works with.
 
 ### 2. Pair Homebridge to Apple Home
