@@ -189,33 +189,33 @@ create_backup_script() {
     
     print_status "Creating backup script..."
     
-    cat > "$backup_script" << 'EOF'
+    cat > "$backup_script" << EOF
 #!/bin/bash
 # Homebridge Configuration Backup Script
 
-BACKUP_DIR="$HOME/homebridge-backups"
-TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-HOMEBRIDGE_CONFIG="$HOME/home-automation/homebridge/config"
+BACKUP_DIR="\$HOME/homebridge-backups"
+TIMESTAMP=\$(date +%Y%m%d-%H%M%S)
+HOMEBRIDGE_CONFIG="$REPO_DIR/homebridge/config"
 
 # Create backup directory if it doesn't exist
-mkdir -p "$BACKUP_DIR"
+mkdir -p "\$BACKUP_DIR"
 
 # Check if config directory exists
-if [[ ! -d "$HOMEBRIDGE_CONFIG" ]]; then
-    echo "ERROR: Homebridge config directory not found at $HOMEBRIDGE_CONFIG"
+if [[ ! -d "\$HOMEBRIDGE_CONFIG" ]]; then
+    echo "ERROR: Homebridge config directory not found at \$HOMEBRIDGE_CONFIG"
     exit 1
 fi
 
 # Create backup
 echo "Creating backup..."
-tar -czf "$BACKUP_DIR/homebridge-config-$TIMESTAMP.tar.gz" \
-    -C "$(dirname "$HOMEBRIDGE_CONFIG")" "$(basename "$HOMEBRIDGE_CONFIG")"
+tar -czf "\$BACKUP_DIR/homebridge-config-\$TIMESTAMP.tar.gz" \\
+    -C "\$(dirname "\$HOMEBRIDGE_CONFIG")" "\$(basename "\$HOMEBRIDGE_CONFIG")"
 
-if [[ $? -eq 0 ]]; then
-    echo "Backup created successfully: homebridge-config-$TIMESTAMP.tar.gz"
+if [[ \$? -eq 0 ]]; then
+    echo "Backup created successfully: homebridge-config-\$TIMESTAMP.tar.gz"
     
     # Keep only last 7 backups
-    ls -t "$BACKUP_DIR"/homebridge-config-*.tar.gz | tail -n +8 | xargs -r rm
+    ls -t "\$BACKUP_DIR"/homebridge-config-*.tar.gz | tail -n +8 | xargs -r rm
     echo "Old backups cleaned up (keeping last 7)"
 else
     echo "ERROR: Backup failed"
@@ -233,20 +233,26 @@ create_management_script() {
     
     print_status "Creating management script..."
     
-    cat > "$mgmt_script" << 'EOF'
+    cat > "$mgmt_script" << EOF
 #!/bin/bash
 # Homebridge Management Script
 
-HOMEBRIDGE_DIR="$HOME/home-automation/homebridge"
+SCRIPT_DIR="\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
+HOMEBRIDGE_DIR="\$SCRIPT_DIR/homebridge"
 
-cd "$HOMEBRIDGE_DIR" || exit 1
+if [[ ! -d "\$HOMEBRIDGE_DIR" ]]; then
+    echo "ERROR: Homebridge directory not found at \$HOMEBRIDGE_DIR"
+    exit 1
+fi
 
-case "$1" in
+cd "\$HOMEBRIDGE_DIR" || exit 1
+
+case "\$1" in
     start)
         echo "Starting Homebridge..."
         docker-compose up -d
-        RPI_IP=$(hostname -I | awk '{print $1}')
-        echo "Homebridge started. Access UI at http://$RPI_IP:8581"
+        RPI_IP=\$(hostname -I | awk '{print \$1}')
+        echo "Homebridge started. Access UI at http://\$RPI_IP:8581"
         ;;
     stop)
         echo "Stopping Homebridge..."
@@ -271,8 +277,8 @@ case "$1" in
         echo "Homebridge updated"
         ;;
     backup)
-        if [[ -f "$HOME/backup-homebridge.sh" ]]; then
-            "$HOME/backup-homebridge.sh"
+        if [[ -f "\$HOME/backup-homebridge.sh" ]]; then
+            "\$HOME/backup-homebridge.sh"
         else
             echo "ERROR: Backup script not found"
             exit 1
@@ -285,7 +291,7 @@ case "$1" in
     *)
         echo "Homebridge Management Script"
         echo ""
-        echo "Usage: $0 {start|stop|restart|logs|status|update|backup|shell}"
+        echo "Usage: \$0 {start|stop|restart|logs|status|update|backup|shell}"
         echo ""
         echo "Commands:"
         echo "  start   - Start Homebridge"
