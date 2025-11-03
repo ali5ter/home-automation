@@ -56,6 +56,11 @@ install_docker() {
     fi
 
     print_status "Installing Docker..."
+    
+    # Remove any conflicting packages first
+    print_info "Removing any conflicting Docker packages..."
+    sudo apt remove -y docker-buildx docker-compose docker-cli 2>/dev/null || true
+    
     curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
     sudo sh /tmp/get-docker.sh
     rm /tmp/get-docker.sh
@@ -68,13 +73,34 @@ install_docker() {
 
 # Install Docker Compose
 install_docker_compose() {
+    # Check if docker compose plugin is available (installed by Docker script)
+    if docker compose version &> /dev/null; then
+        print_status "Docker Compose plugin is already installed ($(docker compose version))"
+        print_info "You can use 'docker compose' (no hyphen) commands"
+        
+        # Create a symlink for docker-compose compatibility
+        if [[ ! -f /usr/local/bin/docker-compose ]]; then
+            print_status "Creating docker-compose symlink for compatibility..."
+            sudo tee /usr/local/bin/docker-compose > /dev/null << 'DCEOF'
+#!/bin/bash
+docker compose "$@"
+DCEOF
+            sudo chmod +x /usr/local/bin/docker-compose
+        fi
+        return
+    fi
+    
+    # If plugin not available, try standalone docker-compose
     if command -v docker-compose &> /dev/null; then
         print_status "Docker Compose is already installed ($(docker-compose --version))"
         return
     fi
 
-    print_status "Installing Docker Compose..."
-    sudo apt install -y docker-compose
+    print_status "Installing Docker Compose standalone..."
+    # Download latest docker-compose binary
+    COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    sudo curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
     print_status "Docker Compose installed successfully"
 }
 
