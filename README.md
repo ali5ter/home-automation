@@ -2,7 +2,7 @@
 
 These are notes and enablement software that helped me set up Apple Home automation of my Nest thermostats, Ring video doorbell, Apple speakers, etc.
 
-This is based on using Apple as your base platform and integrating other products to that environment.
+**Note: After using Homebridge on my iMac, I decided to stand up the Homebridge server on a Rasperry Pi server on my network. Notes about this are found under the [migration](migration/) folder.**
 
 ## Prerequisites
 
@@ -20,13 +20,13 @@ Perform the following steps on your phone close to the thermostat you want to ad
 
 ## Bridging 3rd gen Nest thermostats to Apple Home
 
-Previous generations of Nest don't support Matter. We use [Homebridge](https://homebridge.io) with the homebridge-google-nest-sdm plugin which uses Google’s Smart Device Management API.
+Previous generations of Nest don't support Matter. I used [Homebridge](https://homebridge.io) with the homebridge-google-nest-sdm plugin which uses Google’s Smart Device Management API.
 
 ### 1. Run a Homebridge server on your machine
 
 Doing this with Docker Compose is super convenient and this [docker-compose.yml](homebridge/docker-compose.yml) file provides the definition. Running [start_server_stack.sh](start_server_stack.sh) script will use this definition to stand up the server.
 
-** Note: Homebridge in Docker Desktop for macOS can’t be discovered by the Apple Home app reliably because Docker on Mac doesn’t expose the container’s mDNS/Bonjour to your LAN. This means Apple Home cannot find Homebridge running in Docker due to network isolation. Host networking doesn’t fix it on Mac (Docker’s host mode is a VM thing, not your actual Wi-Fi/Ethernet). For more details, see [Docker Desktop networking limitations on macOS](https://docs.docker.com/desktop/networking/).
+**Note: Homebridge in Docker Desktop for macOS can’t be discovered by the Apple Home app reliably because Docker on Mac doesn’t expose the container’s mDNS/Bonjour to your LAN. This means Apple Home cannot find Homebridge running in Docker due to network isolation. Host networking doesn’t fix it on Mac (Docker’s host mode is a VM thing, not your actual Wi-Fi/Ethernet). For more details, see [Docker Desktop networking limitations on macOS](https://docs.docker.com/desktop/networking/).**
 
 You can install Homebridge natively on macOS as long as you have [Node](https://nodejs.org/en) installed (which is easily installed using [homebrew](brew.sh)). To install Node using Homebrew, run:
 
