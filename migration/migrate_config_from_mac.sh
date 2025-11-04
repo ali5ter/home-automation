@@ -200,6 +200,9 @@ create_credentials_checklist() {
     local export_dir="$HOME/homebridge-export"
     local checklist_file="$export_dir/CREDENTIALS_CHECKLIST.txt"
     
+    # Ensure export directory exists
+    mkdir -p "$export_dir"
+    
     cat > "$checklist_file" << 'EOF'
 HOMEBRIDGE CREDENTIALS CHECKLIST
 ================================
