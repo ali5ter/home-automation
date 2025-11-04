@@ -113,20 +113,29 @@ TO IMPORT ON RASPBERRY PI:
    tar -xzf homebridge-config-*.tar.gz
 
 4. Stop Homebridge if running:
-   cd ~/home-automation
+   cd ~/src/home-automation/homebridge
    ./manage_homebridge.sh stop
 
 5. Backup existing config (if any):
    ./manage_homebridge.sh backup
 
 6. Copy the configuration:
-   cp -r temp-export/* ~/home-automation/homebridge/config/
+   sudo cp -r temp-export/* ~/src/home-automation/homebridge/config/
+   sudo chown -R 1000:1000 ~/src/home-automation/homebridge/config/ 
 
 7. Start Homebridge:
    ./manage_homebridge.sh start
 
 8. Check logs for any issues:
    ./manage_homebridge.sh logs
+
+9. Remove homebridge from Apple Home
+   sudo hb-service uninstall
+   sudo npm uninstall -g homebridge homebridge-config-ui-x
+   sudo launchctl list | grep homebridge
+
+10. Install plugins on RPi Homebridge
+   Use the Homebridge UI to install the homebridge-google-nest-sdm and homebridge-ring plugins.
 
 IMPORTANT NOTES:
 ---------------

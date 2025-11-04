@@ -185,7 +185,7 @@ EOF
 
 # Create backup script
 create_backup_script() {
-    local backup_script="$HOME/backup-homebridge.sh"
+    local backup_script="$REPO_DIR/backup-homebridge.sh"
     
     print_status "Creating backup script..."
     
@@ -193,7 +193,7 @@ create_backup_script() {
 #!/bin/bash
 # Homebridge Configuration Backup Script
 
-BACKUP_DIR="\$HOME/homebridge-backups"
+BACKUP_DIR="\$REPO_DIR/homebridge/homebridge-backups"
 TIMESTAMP=\$(date +%Y%m%d-%H%M%S)
 HOMEBRIDGE_CONFIG="$REPO_DIR/homebridge/config"
 
@@ -229,7 +229,7 @@ EOF
 
 # Create management script
 create_management_script() {
-    local mgmt_script="$REPO_DIR/manage_homebridge.sh"
+    local mgmt_script="$REPO_DIR/homebridge/manage_homebridge.sh"
     
     print_status "Creating management script..."
     
@@ -238,7 +238,7 @@ create_management_script() {
 # Homebridge Management Script
 
 SCRIPT_DIR="\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
-HOMEBRIDGE_DIR="\$SCRIPT_DIR/homebridge"
+HOMEBRIDGE_DIR="\$SCRIPT_DIR"
 
 if [[ ! -d "\$HOMEBRIDGE_DIR" ]]; then
     echo "ERROR: Homebridge directory not found at \$HOMEBRIDGE_DIR"
@@ -277,8 +277,8 @@ case "\$1" in
         echo "Homebridge updated"
         ;;
     backup)
-        if [[ -f "\$HOME/backup-homebridge.sh" ]]; then
-            "\$HOME/backup-homebridge.sh"
+        if [[ -f "\$REPO_DIR/homebridge/backup-homebridge.sh" ]]; then
+            "\$REPO_DIR/homebridge/backup-homebridge.sh"
         else
             echo "ERROR: Backup script not found"
             exit 1

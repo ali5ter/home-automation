@@ -1,1 +1,4 @@
 .env
+config.json
+manage_homebridge.sh
+backup_homebridge.sh
